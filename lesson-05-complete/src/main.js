@@ -1,6 +1,6 @@
-console.log('Lesson 06 starter loaded');
+console.log('Lesson 05 starter loaded');
 
-// Selecting elements
+// 1. Selecting elements
 const titleEl = document.querySelector('#page-title');
 const taglineEl = document.querySelector('.tagline');
 const heroImg = document.querySelector('#hero-img');
@@ -8,30 +8,11 @@ const heroCaption = document.querySelector('#hero-caption');
 const dynamicBox = document.querySelector('#dynamic-box');
 const footerNote = document.querySelector('#footer-note');
 
-// 1. Create a new variable for the feature list element
-
-// 2. Add feature list to the displayed elements below
 console.log('Selected elements:', {
   titleEl, taglineEl, heroImg, heroCaption, dynamicBox, footerNote,
 });
 
-// 3. Modify list content
-
-// 4. Add a new item dynamically
-
-// 5. Retreive all list items (querySelectorAll) and update their text
-
-// 6. Removing the first item from the list using DOM relationships to find it
-
-// 7. Update the second item using nextElementSibling
-
-// 8. Move the last item to the front of the list
-
-// 9. Use a timer to add a new item after 3 seconds have passed
-
-// **** THE FOLLOWING IS EXISTING CODE FROM LESSON 05
-
-// textContent vs innerHTML
+// 2. textContent vs innerHTML
 titleEl.textContent = 'DOM: Your JavaScript Window into Page Structure';
 
 dynamicBox.innerHTML = `
@@ -43,11 +24,11 @@ dynamicBox.innerHTML = `
 // When you only need text (no markup), prefer textContent:
 heroCaption.textContent = 'This caption was updated using textContent.';
 
-// Attributes & styles
+// 3. Attributes & styles
 heroImg.setAttribute('alt', 'A replaceable sample image');
 heroImg.style.borderColor = '#0d6efd'; // inline style to illustrate visual change
 
-// Create small helper functions for reuse
+// 4. Create small helper functions for reuse
 function updateText(selector, text) {
   const el = document.querySelector(selector);
   if (!el) return console.warn('No element found for', selector);
@@ -74,7 +55,7 @@ function setStyle(selector, styleObj = {}) {
   });
 }
 
-// Use helpers to perform simple tasks
+// 5. Use helpers to perform simple tasks
 updateText('.tagline', 'Selecting, reading, and modifying nodes with JavaScript.');
 updateHTML('#dynamic-box', `
   <p class="desc">
@@ -85,12 +66,12 @@ updateHTML('#dynamic-box', `
 setAttr('#hero-img', 'title', 'Hover title set from JS');
 setStyle('#hero-img', { borderColor: 'navy' });
 
-// Footer text tweak (demonstrate class toggle & style change)
+// 6. Footer text tweak (demonstrate class toggle & style change)
 footerNote.classList.add('footer-strong');
 // Require innerHTML here to render the &copy; entity correctly
 footerNote.innerHTML = '&copy; 2025 Front End Fundamentals';
 
-// Null-safety tip: check selections before using them
+// 7. Null-safety tip: check selections before using them
 const missing = document.querySelector('#does-not-exist');
 if (!missing) {
   console.warn('Selector #does-not-exist did not match any element.');

@@ -1,4 +1,4 @@
-console.log('Lesson 06 starter loaded');
+console.log('Lesson 05 starter loaded');
 
 // Selecting elements
 const titleEl = document.querySelector('#page-title');
@@ -8,26 +8,45 @@ const heroCaption = document.querySelector('#hero-caption');
 const dynamicBox = document.querySelector('#dynamic-box');
 const footerNote = document.querySelector('#footer-note');
 
-// 1. Create a new variable for the feature list element
+// 1. New element for list manipulation
+const featureList = document.querySelector('#feature-list');
 
-// 2. Add feature list to the displayed elements below
+// 2. Add feature list to the displayed elements
 console.log('Selected elements:', {
-  titleEl, taglineEl, heroImg, heroCaption, dynamicBox, footerNote,
+  titleEl, taglineEl, heroImg, heroCaption, featureList, dynamicBox, footerNote,
 });
 
 // 3. Modify list content
 
 // 4. Add a new item dynamically
+const li = document.createElement('li');
+li.className = 'feature';
+li.textContent = 'Flexible';
+featureList.appendChild(li);
 
 // 5. Retreive all list items (querySelectorAll) and update their text
+const features = document.querySelectorAll('.feature');
+features.forEach((li, idx) => {
+  li.textContent = `${idx + 1}. ${li.textContent}`;
+});
 
 // 6. Removing the first item from the list using DOM relationships to find it
+featureList.removeChild(featureList.firstElementChild);
 
 // 7. Update the second item using nextElementSibling
+featureList.firstChild.nextElementSibling.textContent += ' (updated)';
 
 // 8. Move the last item to the front of the list
+const last = featureList.removeChild(featureList.lastChild);
+featureList.insertBefore(last, featureList.firstChild);
 
 // 9. Use a timer to add a new item after 3 seconds have passed
+setTimeout(() => {
+  const newLi = document.createElement('li');
+  newLi.className = 'feature';
+  newLi.textContent = 'I am new! (added after 3 seconds)';
+  featureList.appendChild(newLi);
+}, 3000);
 
 // **** THE FOLLOWING IS EXISTING CODE FROM LESSON 05
 
