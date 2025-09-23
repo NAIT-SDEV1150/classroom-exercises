@@ -1,4 +1,4 @@
-console.log('Lesson 03 starter loaded');
+console.log('Lesson 05 starter loaded');
 
 // 1. Selecting elements
 
