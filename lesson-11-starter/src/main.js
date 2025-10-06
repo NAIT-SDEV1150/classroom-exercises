@@ -34,6 +34,11 @@ form.addEventListener('submit', (event) => {
       - Strengths: ${data.topics.length ? data.topics.join(', ') : '(none)'}
       - Bio: ${data.bio || '(none)'}
       - Time: ${data.submittedAt}`;
+  
+  // STUDENT TODO: Add validation logic to the form, ensure all fields are valid before allowing submission
+  // HINT: see the 'input' event listener below for examples of validation logic. Perhaps
+  // you can reuse some of that code here to validate all fields on submit, or create validation
+  // functions that can be reused in both places.
 });
 
 form.addEventListener('reset', () => {
@@ -46,7 +51,7 @@ form.addEventListener('reset', () => {
 
 // 1.2 custom validation for bio (minimum length)
 
-// 1.3 custom validation for email (basic pattern check)
+// 1.3 custom validation for email (basic '@' symbol check)
 
 // 1.4 report the validity status to the user
   

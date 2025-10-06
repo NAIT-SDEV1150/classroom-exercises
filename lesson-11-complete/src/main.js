@@ -34,6 +34,14 @@ form.addEventListener('submit', (event) => {
       - Strengths: ${data.topics.length ? data.topics.join(', ') : '(none)'}
       - Bio: ${data.bio || '(none)'}
       - Time: ${data.submittedAt}`;
+
+  // STUDENT TODO: Add validation logic to the form, ensure all fields are valid before allowing submission
+  // HINT: see the 'input' event listener below for examples of validation logic. Perhaps
+  // you can reuse some of that code here to validate all fields on submit, or create validation
+  // functions that can be reused in both places.
+
+  // OPTIONAL - use the following to trigger built-in HTML validation
+  // form.checkValidity();
 });
 
 form.addEventListener('reset', () => {
@@ -63,11 +71,14 @@ form.addEventListener('input', (event) => {
     }
   }
 
-  // 1.3 custom validation for email (basic pattern check)
+  // 1.3 custom validation for email (basic '@' symbol check)
   if (target.name === 'email') {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(target.value)) {
-      target.setCustomValidity('Please enter a valid email address.');
+    // OPTIONAL - use the following to enable pattern check
+    // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailPattern.test(target.value)) {
+    //   target.setCustomValidity('Please enter a valid email address.');
+    if (!target.value.includes('@')) {
+      target.setCustomValidity('Email must contain an "@" symbol.');
     } else {
       target.setCustomValidity('');
     }
