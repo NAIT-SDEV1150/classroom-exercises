@@ -15,8 +15,7 @@ console.log('Selected elements:', {
   titleEl, taglineEl, heroImg, heroCaption, dynamicBox, footerNote,
 });
 
-// 3. Modify list content
-
+// Modify list content
 // 4. Add a new item dynamically
 
 // 5. Retreive all list items (querySelectorAll) and update their text

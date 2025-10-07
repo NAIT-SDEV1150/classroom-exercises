@@ -31,25 +31,34 @@ heroImg.style.borderColor = '#0d6efd'; // inline style to illustrate visual chan
 // 4. Create small helper functions for reuse
 function updateText(selector, text) {
   const el = document.querySelector(selector);
-  if (!el) return console.warn('No element found for', selector);
+  if (!el) {
+    return console.warn('No element found for', selector);
+  }
   el.textContent = text;
 }
 
 function updateHTML(selector, html) {
   const el = document.querySelector(selector);
-  if (!el) return console.warn('No element found for', selector);
+  if (!el) {
+    return console.warn('No element found for', selector);
+  }
   el.innerHTML = html;
 }
 
+// OPTIONAL: more helpers for attributes and styles
 function setAttr(selector, name, value) {
   const el = document.querySelector(selector);
-  if (!el) return console.warn('No element found for', selector);
+  if (!el) {
+    return console.warn('No element found for', selector);
+  }
   el.setAttribute(name, value);
 }
 
 function setStyle(selector, styleObj = {}) {
   const el = document.querySelector(selector);
-  if (!el) return console.warn('No element found for', selector);
+  if (!el) {
+    return console.warn('No element found for', selector);
+  }
   Object.entries(styleObj).forEach(([k, v]) => {
     el.style[k] = v;
   });
@@ -63,6 +72,7 @@ updateHTML('#dynamic-box', `
   </p>
 `);
 
+// OPTIONAL: use attribute and style helpers if defined
 setAttr('#hero-img', 'title', 'Hover title set from JS');
 setStyle('#hero-img', { borderColor: 'navy' });
 
@@ -70,9 +80,3 @@ setStyle('#hero-img', { borderColor: 'navy' });
 footerNote.classList.add('footer-strong');
 // Require innerHTML here to render the &copy; entity correctly
 footerNote.innerHTML = '&copy; 2025 Front End Fundamentals';
-
-// 7. Null-safety tip: check selections before using them
-const missing = document.querySelector('#does-not-exist');
-if (!missing) {
-  console.warn('Selector #does-not-exist did not match any element.');
-}
