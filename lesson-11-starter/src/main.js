@@ -1,44 +1,53 @@
-console.log('Lesson 10 starter loaded');
+console.log('Lesson 11 starter loaded');
 
 const form = document.querySelector('#contact-form');
 const result = document.querySelector('#result');
 
 function serializeForm(formEl) {
-  const { fullName, email, bio } = formEl.elements;
+  const fullNameValue = formEl.elements.fullName.value;
+  const emailValue = formEl.elements.email.value;
+  const bioValue = formEl.elements.bio.value;
 
-  const plan = formEl.elements.plan.value;
-
-  const topics = Array.from(formEl.querySelectorAll('input[name="topics"]:checked'))
-    .map(cb => cb.value);
+  const planValue = formEl.elements.plan.value;
+  let topicValue = '';
+  formEl.elements.topics.forEach((el) => {
+    if (el.checked) {
+      topicValue += `${el.value} `;
+    }
+  });
 
   return {
-    fullName: fullName.value.trim(),
-    email: email.value.trim(),
-    plan,
-    topics,
-    bio: bio.value.trim(),
-    submittedAt: new Date().toLocaleString(),
+    fullName: fullNameValue,
+    email: emailValue,
+    bio: bioValue,
+    plan: planValue,
+    topics: topicValue,
   };
 }
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
 
   const data = serializeForm(form);
 
-  result.textContent
-    = `Submission received:
-      - Name: ${data.fullName || '(none)'}
-      - Email: ${data.email || '(none)'}
-      - Skill: ${data.plan || '(none)'}
-      - Strengths: ${data.topics.length ? data.topics.join(', ') : '(none)'}
-      - Bio: ${data.bio || '(none)'}
-      - Time: ${data.submittedAt}`;
-  
-  // STUDENT TODO: Add validation logic to the form, ensure all fields are valid before allowing submission
+  // Student TODO: Add validation logic to the form, ensure all fields are valid before allowing submission
   // HINT: see the 'input' event listener below for examples of validation logic. Perhaps
   // you can reuse some of that code here to validate all fields on submit, or create validation
   // functions that can be reused in both places.
+
+  // OPTIONAL - use the following alongside the `novalidate` form attribute
+  // to trigger built-in HTML validation
+  // if (form.checkValidity()) {
+  
+  result.textContent = `
+    Submission received:
+    - Name: ${data.fullName}
+    - Email: ${data.email}
+    - Bio: ${data.bio}
+    - Plan: ${data.plan}
+    - Topics: ${data.topics}
+  `;
+  // } // end if form.checkValidity()
 });
 
 form.addEventListener('reset', () => {
