@@ -1,0 +1,20 @@
+{
+  "name": "lesson-13-complete",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js",
+    "format": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dayjs": "^1.11.18"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
