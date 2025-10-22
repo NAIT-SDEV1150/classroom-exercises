@@ -59,6 +59,142 @@ In the `index.html` file, you will see the interface is fairly simple. It consis
 
 Working alongside your instructor, you will create and call async functions to interact with the backend API server. A simple function to fetch data will be created followed by an event handler for the form to post new data to the server.
 
+### Build Utility Functions
+
+To keep our concerns separate, create a `utils.js` file for the API functions
+
+In this file, export a function for fetching data; it should not be specific to the application context we're woring in (i.e., does not presume 'books'). The function requires only the desired endpoint as a parameter.
+
+```js
+// utils.js
+export async function fetchData(endpoint) {
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error('Network response failed');
+  }
+  const data = await response.json();
+  return data;
+}
+```
+
+> **Note that exception handling is not done here. The calling application will be responsible for handling any exceptions that may occur during API calls.**
+
+Also export a function that can be used to post data.
+
+```js
+// utils.js
+export async function postData(endpoint, payload) {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response failed');
+  }
+
+  const data = await response.json();
+  return data;
+}
+```
+
+This function requires additional headers to be set as we can't rely on the defaults.
+
+### Build the App
+
+Now that we have funtions available to work with the backend, we can use them in our application.
+
+Import both functions into `main.js`:
+
+```js
+// main.js
+import { fetchData, postData } from './utils';
+```
+
+And then select all the required elements:
+
+```js
+// main.js
+const loadButton = document.getElementById('loadBooks');
+const addForm = document.getElementById('addBook');
+const list = document.getElementById('bookList');
+```
+
+We will also create an `endpoint` constant to use in our API function calls:
+```js
+// main.js
+const endpoint = 'http://localhost:3000/books';
+```
+
+#### Add Event Listeners
+
+The application provides two features: loading existing books and creating new books. First, add the load handler function. This function will fetch the books collection and render each book to the page.
+
+```js
+// main.js
+async function loadHandler() {
+  list.innerHTML = '<li>Loading...</li>';
+
+  try {
+    const books = await fetchData(endpoint);
+
+    list.innerHTML = '';
+
+    books.forEach((book) => {
+      const li = document.createElement('li');
+      li.textContent = `${book.title} by ${book.author}`;
+      list.appendChild(li);
+    });
+  } catch (error) {
+    list.innerHTML = `<li style="color:red;">Error: ${error.message}</li>`;
+  }
+}
+```
+
+Connect the handler to the `loadButton`:
+
+```js
+// main.js
+loadButton.addEventListener('click', loadHandler);
+```
+
+Next, add the submit handler function. This function will gather data from the form and post the request to the backend.
+
+```js
+// main.js
+async function submitHandler(e) {
+  e.preventDefault(); // never reload the page
+  const form = e.target;
+  // Use the FormData API to collect form data
+  // NOTE: this example lacks form validation, which should be implemented
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  data['year'] = Number(data.year); // convert year to number
+
+  try {
+    await postData(endpoint, data);
+
+    // Call loadHandler to refresh the list
+    loadHandler();
+  } catch (error) {
+    // TODO: Display a better error for the user
+    console.error('Error submitting form:', error);
+  }
+}
+```
+
+Connect the handler to the `addForm`:
+
+```js
+// main.js
+addForm.addEventListener('click', submitHandler);
+```
+
+You should now be able to load and add books.
+
 ## Student Exercise
 
 Extend the example by adding functionality to **DELETE** a selected book.
