@@ -258,7 +258,7 @@ anotherUserCard.appendChild(nameSpan);
 anotherUserCard.appendChild(descSpan);
 
 document.querySelector('main').appendChild(anotherUserCard);
-// Why doesn't the custom avatar show up for this element (answered in a future lesson)?
+// Why doesn't the custom avatar show up for this element?
 
 ```
 
@@ -270,11 +270,11 @@ Add a "Details" slot within the shadow DOM that shows a random "status" message 
 ## Common Errors & Fixes
 
 | Issue | Cause | Solution |
-|-------|--------|-----------|
-| Component not appearing | `customElements.define` missing or misspelled | Define before first use |
-| Styles not applied | Added styles outside shadow root | Move `<style>` into the shadow DOM |
-| Slots empty | Slot name mismatch | Match slot attributes in both template and element |
-| Template not found | `getElementById` or `querySelector` returns null | Ensure `<template id="user-card-template">` exists before script runs |
+|-------|-------|----------|
+| Component not appearing | `customElements.define` missing or defined after first use | Ensure element is defined before instances are parsed (import early) |
+| Styles not applied | `<style>` not inside template or shadow root | Move scoped styles into the template appended to shadow root |
+| Slots empty | Slot name mismatch | Match slot="name" with <slot name="name"> exactly |
+| Avatar missing for programmatic element | Attribute set after construction and constructor uses it | Set attributes before appending or handle in connectedCallback / attributeChangedCallback |
 
 ## Push to Your GitHub Workbook Repo
 
@@ -293,3 +293,87 @@ git commit -m 'Lesson 19 Example'
 ```sh
 git push origin main
 ```
+
+# Lesson 20 Starter
+
+## In-class Example Walkthrough — Lesson 20
+
+Goal: demonstrate styling a web component using Shadow DOM and CSS custom properties, then add a small theme toggle to show dynamic styling.
+
+Duration: 20–30 minutes
+
+1. Quick setup (2 min)
+   - Ensure the dev server is running:
+     ```sh
+     npm install
+     npm run dev
+     ```
+   - Open the app URL from Vite in the browser.
+
+2. Review the existing component (3 min)
+   - Open src/user-card.js and note:
+     - The template includes a <style> block inside the component.
+     - The template is cloned into the component's shadow root.
+     - The component reads an avatar attribute for the image src.
+
+3. Live edit — expose CSS custom properties (7 min)
+   - Explain why we use CSS variables: allow page-level customization without breaking encapsulation.
+   - In README show an example snippet to update the component's style block (insert inside the template in src/user-card.js):
+
+     ```js
+     // Example snippet to add to the template's <style> in src/user-card.js
+     :host {
+       --card-bg: #ffffff;
+       --card-color: #222222;
+       --card-accent: #0077ff;
+       display: block;
+     }
+     .card {
+       background: var(--card-bg);
+       color: var(--card-color);
+       border: 1px solid rgba(0,0,0,0.06);
+     }
+     .name { color: var(--card-accent); }
+     ```
+
+   - Save and show how changing the variables on the host element (or body) updates the component look.
+
+4. Live edit — dynamic theme toggle (8 min)
+   - Add a simple toggle in src/main.js to switch between light/dark theme by setting CSS variables on document.documentElement or on a wrapper element:
+
+     ```js
+     const toggleBtn = document.createElement('button');
+     toggleBtn.textContent = 'Toggle theme';
+     document.body.prepend(toggleBtn);
+ 
+     let dark = false;
+     toggleBtn.addEventListener('click', () => {
+       dark = !dark;
+       document.documentElement.style.setProperty('--global-card-bg', dark ? '#1f2937' : '#ffffff');
+       document.documentElement.style.setProperty('--global-card-color', dark ? '#e5e7eb' : '#222222');
+       document.documentElement.style.setProperty('--global-card-accent', dark ? 'gold' : '#0077ff');
+     });
+     ```
+
+   - Demonstrate clicking the toggle and point out:
+     - Shadow DOM styles read the variables from the cascade.
+     - The component stays encapsulated but is themeable.
+
+5. Debugging tips (2 min)
+   - If styles don't appear:
+     - Confirm <style> is inside the template that's appended to the shadow root (styles outside won't scope).
+     - Use Elements panel → inspect the component's shadow root to see applied CSS.
+   - If slots are empty:
+     - Match slot="name" and <slot name="name"> exactly.
+   - If avatar image missing for programmatic element:
+     - Ensure attribute is set before or re-render inside connectedCallback; attributes added after construction won't affect an already-cloned template unless handled.
+
+6. Extension challenge / student exercise (5 min)
+   - Add CSS var to control the description colour for dark mode
+   - Expose a `theme` attribute on <user-card> that toggles a small internal dark-mode class (demonstrated attributeChangedCallback for the `avatar` attribute).
+
+References
+- MDN: Using the Shadow DOM — https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM
+- MDN: Using templates and slots — https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots
+
+}

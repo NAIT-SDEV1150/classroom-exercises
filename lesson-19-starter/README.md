@@ -258,7 +258,7 @@ anotherUserCard.appendChild(nameSpan);
 anotherUserCard.appendChild(descSpan);
 
 document.querySelector('main').appendChild(anotherUserCard);
-// Why doesn't the custom avatar show up for this element?
+// Why doesn't the custom avatar show up for this element (answered in a future lesson)?
 
 ```
 
