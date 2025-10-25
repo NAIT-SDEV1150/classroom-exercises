@@ -43,5 +43,5 @@ document.querySelector('user-card').follow();
 document.querySelector('user-card').addEventListener('follow-change', (e) => {
   const card = e.target;
   const name = card.querySelector('[slot=name]').textContent;
-  console.log(`User ${name} is ${card.isFollowed() ? 'followed' : 'not followed'}`);
+  console.log(`User ${name} is ${card.followed ? 'followed' : 'not followed'}`);
 });

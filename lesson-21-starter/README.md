@@ -162,9 +162,9 @@ Open the console and enter the following to see the effect of unfollowing a user
 document.querySelector('user-card').unfollow();
 ```
 
-### Dispatch a Custom Event for External Communication
+### Dispatch a Custom Event and Property for External Communication
 
-Finally, let's dispatch a custom event (`follow-change`) in case any listeners want to be notified when a `<user-card>` is followed/unfollowed. Add a method to read the state of `_followed` as well:
+Finally, let's dispatch a custom event (`follow-change`) in case any listeners want to be notified when a `<user-card>` is followed/unfollowed. Add a read-only property to read the state of `_followed` as well:
 
 ```js
 // user-card.js
@@ -184,7 +184,8 @@ _setFollow(value) {
   }));
 }
 
-isFollowed() {
+// Property to read followed state
+get followed() {
   return this._followed;
 }
 ...
@@ -197,7 +198,7 @@ Listen for and respond to the event in the main application:
 document.querySelector('user-card').addEventListener('follow-change', (e) => {
   const card = e.target;
   const name = card.querySelector('[slot=name]').textContent;
-  console.log(`User ${name} is ${card.isFollowed()? 'followed' : 'not followed'}`);
+  console.log(`User ${name} is ${card.followed? 'followed' : 'not followed'}`);
 });
 ```
 

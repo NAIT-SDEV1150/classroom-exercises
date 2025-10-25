@@ -59,14 +59,79 @@ class UserCard extends HTMLElement {
 
     // Added property to track follow state
     this._followed = false;
+    this._user = null;
+    // Bind the button handler to the custom element
+    this._onButtonClick = this._onButtonClick.bind(this);
 
     const shadow = this.attachShadow({ mode: 'open' });
     const content = template.content.cloneNode(true);
-    const img = content.querySelector('img');
-    img.src = this.getAttribute('avatar') || 'https://placehold.co/80x80/0077ff/ffffff';
+    // Keep the img src blank here — it will be set from property/attribute
+    this._img = content.querySelector('img');
     this._btn = content.querySelector('button');
-    this._btn.addEventListener('click', () => this._onFollow());
     shadow.appendChild(content);
+  }
+
+  _renderFromUser() {
+    if (this._user) {
+      // Update image and fallback attributes
+      if (this._user.avatar) {
+        this._img.src = this._user.avatar;
+      } else {
+        this._img.src = 'https://placehold.co/80x80/0077ff/ffffff';
+      }
+
+      this.setAttribute('user-id', this._user.id || '');
+      // Update internal slots via shadow DOM query selectors for text nodes.
+      // We want to avoid manipulating light DOM directly since we are provided with a user property.
+      const nameSlot = this.shadowRoot.querySelector('slot[name="name"]');
+      if (nameSlot) {
+        nameSlot.textContent = this._user.name || '';
+      }
+
+      const descSlot = this.shadowRoot.querySelector('slot[name="description"]');
+      if (descSlot) {
+        descSlot.textContent = this._user.description || '';
+      }
+    }
+  }
+
+  // Create a user property { id, name, avatar, description }
+  set user(obj) {
+    this._user = obj;
+    // Render the UI (assume user has changed)
+    this._renderFromUser();
+  }
+
+  get user() {
+    return this._user;
+  }
+
+  _onButtonClick() {
+    this._setFollow(!this._followed);
+  }
+
+  // Lifecycle: called when element is added to DOM
+  connectedCallback() {
+    // Attach local listener(s)
+    this._btn.addEventListener('click', this._onButtonClick);
+
+    // If user property was set before connection, render it now
+    if (this._user) {
+      this._renderFromUser();
+    } else {
+      // Fallback to attributes if user property not provided
+      const avatar = this.getAttribute('avatar');
+      if (avatar) {
+        this._img.src = avatar;
+      } else {
+        this._img.src = 'https://placehold.co/80x80/0077ff/ffffff';
+      }
+    }
+  }
+
+  disconnectedCallback() {
+    // Cleanup listener
+    this._btn.removeEventListener('click', this._onButtonClick);
   }
 
   follow() {
