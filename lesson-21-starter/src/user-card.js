@@ -47,7 +47,6 @@ template.innerHTML = `
     <div class="info">
       <slot name="name" class="name"></slot>
       <slot name="description" class="description"></slot>
-      <button>Follow</button>
     </div>
   </div>
 `;
@@ -57,43 +56,12 @@ class UserCard extends HTMLElement {
   constructor() {
     super();
 
-    // Added property to track follow state
-    this._followed = false;
-
     const shadow = this.attachShadow({ mode: 'open' });
     const content = template.content.cloneNode(true);
     const img = content.querySelector('img');
     img.src = this.getAttribute('avatar') || 'https://placehold.co/80x80/0077ff/ffffff';
-    this._btn = content.querySelector('button');
-    this._btn.addEventListener('click', () => this._onFollow());
+
     shadow.appendChild(content);
-  }
-
-  follow() {
-    this._setFollow(true);
-  }
-
-  unfollow() {
-    this._setFollow(false);
-  }
-
-  isFollowed() {
-    return this._followed;
-  }
-
-  _setFollow(value) {
-    this._followed = value;
-    this._btn.textContent = this._followed ? 'Following' : 'Follow';
-    this.dispatchEvent(new CustomEvent('follow-change', {
-      detail: { id: this.getAttribute('user-id') || null, followed: this._followed },
-      bubbles: true,
-      composed: true,
-    }));
-  }
-
-  // Follow button handler
-  _onFollow() {
-    this._setFollow(!this._followed);
   }
 
   // Respond to attribute changes if needed in the future

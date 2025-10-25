@@ -23,8 +23,6 @@ anotherUserCard.appendChild(nameSpan);
 anotherUserCard.appendChild(descSpan);
 
 document.querySelector('main').appendChild(anotherUserCard);
-// Why doesn't the custom avatar show up for this element?
-// attributeChangedCallback is not implemented in the user-card component to respond to attribute changes after initial rendering.
 
 // Add a button to toggle the theme accent color (used to demonstrate CSS variables cascading into Shadow DOM)
 const toggleBtn = document.createElement('button');
