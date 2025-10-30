@@ -106,6 +106,7 @@ class UserCard extends HTMLElement {
     return this._user;
   }
 
+  // Formerly _onFollow renamed to _onButtonClick
   _onButtonClick() {
     this._setFollow(!this._followed);
   }
@@ -155,11 +156,6 @@ class UserCard extends HTMLElement {
       bubbles: true,
       composed: true,
     }));
-  }
-
-  // Follow button handler
-  _onFollow() {
-    this._setFollow(!this._followed);
   }
 
   // Respond to attribute changes if needed in the future

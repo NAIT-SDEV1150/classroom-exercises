@@ -29,6 +29,76 @@ npm run dev
 
 ## Instructor Demo
 
+### Ensure No Outside Access to Class Attributes
+
+JavaScript supports private class attributes. You can mark a class attribute as private by prefixing it with a `#` symbol. Update the user-card to implement the followed attribute as a private field.
+
+```js
+// user-card.js
+class UserCard extends HTMLElement {
+  #followed = false;
+
+  constructor() {
+    super();
+
+    // Added property to track follow state
+    this.#followed = false;
+
+    const shadow = this.attachShadow({ mode: 'open' });
+    const content = template.content.cloneNode(true);
+    const img = content.querySelector('img');
+    img.src = this.getAttribute('avatar') || 'https://placehold.co/80x80/0077ff/ffffff';
+    this._btn = content.querySelector('button');
+    this._btn.addEventListener('click', () => this._onFollow());
+    shadow.appendChild(content);
+  }
+
+  follow() {
+    this._setFollow(true);
+  }
+
+  unfollow() {
+    this._setFollow(false);
+  }
+
+  // Property to read followed state
+  get followed() {
+    return this.#followed;
+  }
+
+  _setFollow(value) {
+    this.#followed = value;
+    this._btn.textContent = this.#followed ? 'Following' : 'Follow';
+    this.dispatchEvent(new CustomEvent('follow-change', {
+      detail: { id: this.getAttribute('user-id') || null, followed: this.#followed },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  // Follow button handler
+  _onFollow() {
+    this._setFollow(!this.#followed);
+  }
+
+  // Respond to attribute changes if needed in the future
+  static get observedAttributes() {
+    return ['avatar'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'avatar' && this.shadowRoot) {
+      const img = this.shadowRoot.querySelector('img');
+      if (img) {
+        img.src = newValue;
+      }
+    }
+  }
+}
+```
+
+This update will prevent any updates to the `#followed` field that do not originate from within the class itself. We will apply this to all internal class state.
+
 ### Add `user` Property and Lifecycle Usage
 
 In `user-card.js`, we'll expose a `user` property (setter/getter), use `connectedCallback` to wire event listeners, and `disconnectedCallback` to remove them.
@@ -39,10 +109,13 @@ In `user-card.js`, we'll expose a `user` property (setter/getter), use `connecte
 // Existing code...
 
 class UserCard extends HTMLElement {
+  #followed = false;
+  #user = null;
+
   constructor() {
     super();
-    this._followed = false;
-    this._user = null;
+    this.#followed = false;
+    this.#user = null;
     // Bind the button handler to the custom element
     this._onButtonClick = this._onButtonClick.bind(this);
 
@@ -55,42 +128,43 @@ class UserCard extends HTMLElement {
   }
 
   _renderFromUser() {
-    if (this._user) {
+    if (this.#user) {
       // Update image and fallback attributes
-      if (this._user.avatar) {
-        this._img.src = this._user.avatar;
+      if (this.#user.avatar) {
+        this._img.src = this.#user.avatar;
       } else {
         this._img.src = 'https://placehold.co/80x80/0077ff/ffffff';
       }
 
-      this.setAttribute('user-id', this._user.id || '');
+      this.setAttribute('user-id', this.#user.id || '');
       // Update internal slots via shadow DOM query selectors for text nodes.
       // We want to avoid manipulating light DOM directly since we are provided with a user property.
       const nameSlot = this.querySelector('[slot="name"]');
       if (nameSlot) {
-        nameSlot.textContent = this._user.name || '';
+        nameSlot.textContent = this.#user.name || '';
       }
       
       const descSlot = this.querySelector('[slot="description"]');
       if (descSlot) {
-        descSlot.textContent = this._user.description || '';
+        descSlot.textContent = this.#user.description || '';
       }
     }
   }
 
   // Create a user property { id, name, avatar, description }
   set user(obj) {
-    this._user = obj;
+    // TODO: Perform some data validation on the obj param here
+    this.#user = obj;
     // Render the UI (assume user has changed)
     this._renderFromUser();
   }
 
   get user() {
-    return this._user;
+    return this.#user;
   }
 
   _onButtonClick() {
-    this._setFollow(!this._followed);
+    this._setFollow(!this.#followed);
   }
 
   // Lifecycle: called when element is added to DOM
@@ -99,7 +173,7 @@ class UserCard extends HTMLElement {
     this._btn.addEventListener('click', this._onButtonClick);
 
     // If user property was set before connection, render it now
-    if (this._user) {
+    if (this.#user) {
       this._renderFromUser();
     }
 
