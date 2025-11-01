@@ -11,6 +11,13 @@ const button = document.getElementById('btn-propagate');
 // 2. Add event listeners
 
 // 2.1 Outer div - using a named function
+
+
+// Instructor note: run clicks on the button, the inner region, and the outer
+// region and observe the `log` text. Then remove `stopPropagation()` to show
+// bubbling, and try `{ capture: true }` on the outer listener to show capture
+// behavior.
+
 function outerClick() {
   log.textContent += 'Outer clicked (capture) | ';
 }

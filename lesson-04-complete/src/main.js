@@ -52,6 +52,13 @@ if (num > 5) {
   console.log('num is 5 or less');
 }
 
-for (let k = 0; k < 3; k = k + 1) {
-  console.log(k);
+let k = 0;
+while (k < 3) {
+  k = k + 1;
+	console.log(k);
 }
+
+// Or as a for loop
+// for (let k = 0; k < 3; k = k + 1) {
+//   console.log(k);
+// }

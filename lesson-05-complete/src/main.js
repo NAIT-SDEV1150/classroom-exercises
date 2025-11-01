@@ -21,7 +21,7 @@ dynamicBox.innerHTML = `
   </p>
 `;
 
-// When you only need text (no markup), prefer textContent:
+// When you only need text (no markup), prefer textContent (marginal performance gain)
 heroCaption.textContent = 'This caption was updated using textContent.';
 
 // 3. Attributes & styles
@@ -34,6 +34,7 @@ function updateText(selector, text) {
   if (!el) {
     return console.warn('No element found for', selector);
   }
+
   el.textContent = text;
 }
 
@@ -42,26 +43,8 @@ function updateHTML(selector, html) {
   if (!el) {
     return console.warn('No element found for', selector);
   }
+
   el.innerHTML = html;
-}
-
-// OPTIONAL: more helpers for attributes and styles
-function setAttr(selector, name, value) {
-  const el = document.querySelector(selector);
-  if (!el) {
-    return console.warn('No element found for', selector);
-  }
-  el.setAttribute(name, value);
-}
-
-function setStyle(selector, styleObj = {}) {
-  const el = document.querySelector(selector);
-  if (!el) {
-    return console.warn('No element found for', selector);
-  }
-  Object.entries(styleObj).forEach(([k, v]) => {
-    el.style[k] = v;
-  });
 }
 
 // 5. Use helpers to perform simple tasks
@@ -71,10 +54,6 @@ updateHTML('#dynamic-box', `
     Replaced again via <code>updateHTML()</code>. Notice how we can inject different markup here.
   </p>
 `);
-
-// OPTIONAL: use attribute and style helpers if defined
-setAttr('#hero-img', 'title', 'Hover title set from JS');
-setStyle('#hero-img', { borderColor: 'navy' });
 
 // 6. Footer text tweak (demonstrate class toggle & style change)
 footerNote.classList.add('footer-strong');

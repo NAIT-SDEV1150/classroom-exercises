@@ -14,14 +14,15 @@ console.log('Lesson 04 starter loaded');
 /*
 const num = 10;
 
-if (num < 5) { // Intentional bug: should be num > 5
+if (num < 5) {
   console.log('num is greater than 5');
 } else {
   console.log('num is 5 or less');
 }
 
-for (let k = 0; k < 3; k = k - 1) { // Intentional bug: k should increment
-  console.log(k);
+let k = 0;
+while (k < 3) {
+  k + 1;
+	console.log(k);
 }
 */
-// 8. Debugging practice

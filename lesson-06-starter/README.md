@@ -1,4 +1,4 @@
-# Lesson 05 Starter
+# Lesson 06 Starter
 
 ## Setup the lesson example
 
@@ -30,7 +30,71 @@ npm run dev
 5. You should see the default render for the vite project.
 6. Use this as the base for today's examples.
 
-## 
+## Instructor Demo and Student Exercise
+
+Complete the demo along with your instructor and then attempt the exercise prompts (see the comments in the `main.js` file).
+
+### Selecting elements (including the feature list)
+
+````js
+const titleEl = document.querySelector('#page-title');
+const taglineEl = document.querySelector('.tagline');
+const heroImg = document.querySelector('#hero-img');
+const heroCaption = document.querySelector('#hero-caption');
+const dynamicBox = document.querySelector('#dynamic-box');
+const footerNote = document.querySelector('#footer-note');
+
+// new for Lesson 06
+const featureList = document.querySelector('#feature-list');
+
+console.log('Selected elements:', { titleEl, taglineEl, heroImg, heroCaption, featureList, dynamicBox, footerNote });
+````
+
+### Add a new list item dynamically
+
+````js
+const li = document.createElement('li');
+li.className = 'feature';
+li.textContent = 'Flexible';
+featureList.appendChild(li);
+````
+
+### Retrieve all list items and update their text
+
+````js
+const features = document.querySelectorAll('.feature');
+features.forEach((li, idx) => {
+	li.textContent = `${idx + 1}. ${li.textContent}`;
+});
+````
+
+### Remove the first item and update neighbors
+
+````js
+// remove the first element
+featureList.removeChild(featureList.firstElementChild);
+
+// update the second item using nextElementSibling
+featureList.firstChild.nextElementSibling.textContent += ' (updated)';
+````
+
+### Move the last item to the front
+
+````js
+const last = featureList.removeChild(featureList.lastChild);
+featureList.insertBefore(last, featureList.firstChild);
+````
+
+### Add an item after a delay using a timer
+
+````js
+setTimeout(() => {
+	const newLi = document.createElement('li');
+	newLi.className = 'feature';
+	newLi.textContent = 'I am new! (added after 3 seconds)';
+	featureList.appendChild(newLi);
+}, 3000);
+````
 
 ## Push to your GitHub workbook repo
 

@@ -55,10 +55,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if (e.target.tagName === 'LI') {
       const li = e.target;
       // remove previous selection
-      list.querySelectorAll('li.active').forEach(el => el.classList.remove('active'));
-      // Or just find the one active and remove it:
-      // const prev = list.querySelector('li.active');
-      // if (prev) prev.classList.remove('active');
+      const prev = list.querySelector('li.active');
+      if (prev) {
+        prev.classList.remove('active');
+      }
+
+      // Or iterate over all, find the one active, and remove it:
+      // list.querySelectorAll('li.active').forEach(el => el.classList.remove('active'));
+      
 
       // activate clicked
       li.classList.add('active');
