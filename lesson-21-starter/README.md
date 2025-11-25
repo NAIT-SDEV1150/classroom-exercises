@@ -210,14 +210,6 @@ Add styling for the added Follow button.
 ### Toggle the Details
 If you have completed the previous student task of adding a "Details" section to the card, add the ability to toggle the visiblity of the "Details" within the component (e.g., CSS display update). Trigger an event whenever the details display is toggled.
 
-## Common Errors & Fixes
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Styles not applied | `<style>` not inside template or shadow root | Move scoped styles into the template appended to shadow root.<br>Use Elements panel to inspect the component's shadow root to see applied CSS. |
-| Slots empty | Slot name mismatch | Match slot="name" with <slot name="name"> exactly |
-| Avatar missing for programmatic element | Attribute set after construction and constructor uses it | Set attributes before appending or handle in connectedCallback / attributeChangedCallback |
-
 ## Push to Your GitHub Workbook Repo
 
 Once you're done making your own custom updates to the project, stage your files, commit your work, and push to the remote repository.

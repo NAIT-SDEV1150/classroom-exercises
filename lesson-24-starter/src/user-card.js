@@ -66,7 +66,6 @@ class UserCard extends HTMLElement {
 
     const shadow = this.attachShadow({ mode: 'open' });
     const content = template.content.cloneNode(true);
-    // Keep the img src blank here — it will be set from property/attribute
     this._img = content.querySelector('img');
     this._btn = content.querySelector('button');
     shadow.appendChild(content);
@@ -74,7 +73,6 @@ class UserCard extends HTMLElement {
 
   _renderFromUser() {
     if (this.#user) {
-      // Update image and fallback attributes
       if (this.#user.avatar) {
         this._img.src = this.#user.avatar;
       } else {
@@ -82,13 +80,11 @@ class UserCard extends HTMLElement {
       }
 
       this.setAttribute('user-id', this.#user.id || '');
-      // Update internal slots via shadow DOM query selectors for text nodes.
-      // We want to avoid manipulating light DOM directly since we are provided with a user property.
       const nameSlot = this.shadowRoot.querySelector('[name="name"]');
       if (nameSlot) {
         nameSlot.textContent = this.#user.name || '';
       }
-      
+
       const descSlot = this.shadowRoot.querySelector('[name="description"]');
       if (descSlot) {
         descSlot.textContent = this.#user.description || '';
@@ -96,10 +92,8 @@ class UserCard extends HTMLElement {
     }
   }
 
-  // Create a user property { id, name, avatar, description }
   set user(obj) {
     this.#user = obj;
-    // Render the UI (assume user has changed)
     this._renderFromUser();
   }
 
@@ -111,18 +105,12 @@ class UserCard extends HTMLElement {
     this._setFollow(!this.#followed);
   }
 
-  // Lifecycle: called when element is added to DOM
   connectedCallback() {
-    // Attach local listener(s)
     this._btn.addEventListener('click', this._onButtonClick);
 
-    // If user property was set before connection, render it now
     if (this.#user) {
       this._renderFromUser();
-    }
-
-    else {
-      // Fallback to attributes if user property not provided
+    } else {
       const avatar = this.getAttribute('avatar');
       if (avatar) {
         this._img.src = avatar;
@@ -133,7 +121,6 @@ class UserCard extends HTMLElement {
   }
 
   disconnectedCallback() {
-    // Cleanup listener
     this._btn.removeEventListener('click', this._onButtonClick);
   }
 
@@ -145,7 +132,6 @@ class UserCard extends HTMLElement {
     this._setFollow(false);
   }
 
-  // Property to read followed state
   get followed() {
     return this.#followed;
   }
